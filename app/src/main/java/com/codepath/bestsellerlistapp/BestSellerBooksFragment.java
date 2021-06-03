@@ -1,6 +1,9 @@
 package com.codepath.bestsellerlistapp;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.core.widget.ContentLoadingProgressBar;
@@ -49,7 +52,12 @@ public class BestSellerBooksFragment extends Fragment implements OnListFragmentI
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
 
         Context context = view.getContext();
-        recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+        if (context.getResources().getConfiguration(). orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            recyclerView.setLayoutManager(new GridLayoutManager(context, 4));
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+        }
+        // recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
         updateAdapter(progressBar, recyclerView);
         return view;
     }
@@ -88,6 +96,12 @@ public class BestSellerBooksFragment extends Fragment implements OnListFragmentI
 
     @Override
     public void onItemClick(BestSellerBook item) {
-        Toast.makeText(getContext(), "test", Toast.LENGTH_LONG).show();
+        // Toast.makeText(getContext(), "test", Toast.LENGTH_LONG).show();
+
+        Uri webpage = Uri.parse(item.amazonUrl);
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 }
